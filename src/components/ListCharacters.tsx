@@ -28,11 +28,12 @@ export function ListCharacters() {
   const matches = useMediaQuery("(min-width:500px)");
   const [characters, setCharacters] = useState<ICharacters[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [qtdPage, setQtdPage] = useState();
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
 
   async function getCharacters() {
+    setCurrentPage(1);
     setIsLoading(true);
     const response = await apiCharacter.get(`?page=${currentPage}`);
     if (response) {
@@ -42,6 +43,9 @@ export function ListCharacters() {
     }
   }
   useEffect(() => {
+    if (text) {
+      getCharactersByName();
+    }
     getCharacters();
   }, [currentPage]);
 
@@ -53,8 +57,11 @@ export function ListCharacters() {
   };
 
   async function getCharactersByName() {
+    setCurrentPage(1);
     setIsLoading(true);
-    const response = await apiCharacter.get(`?name=${text}`);
+    const response = await apiCharacter.get(
+      `/?page=${currentPage}&name=${text}`
+    );
     if (response) {
       setCharacters(response.data.results);
       setQtdPage(response.data.info.pages);
@@ -81,6 +88,7 @@ export function ListCharacters() {
               sx={{ color: "white" }}
               size="small"
               label="Digite um nome"
+              value={text}
               onChange={(e) => setText(e.target.value)}
             />
             <Button
