@@ -114,7 +114,7 @@ export function ListCharacters() {
             <Button
               sx={{ backgroundColor: "#6E22B5", marginBottom: "20px" }}
               variant="contained"
-              onClick={() => getCharactersByName()}
+              onClick={() => {getCharactersByName(), setCurrentPage(1)}}
             >
               Buscar
             </Button>
