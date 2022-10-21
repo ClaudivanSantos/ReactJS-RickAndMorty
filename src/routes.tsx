@@ -8,6 +8,7 @@ export const MyRoutes = () => {
       <Routes>
         <Route path="/" element={<ListCharacters />} />
         <Route path="/character/:id" element={<Character />} />
+        <Route path="*" element={<ListCharacters />} />
       </Routes>
     </BrowserRouter>
   );
