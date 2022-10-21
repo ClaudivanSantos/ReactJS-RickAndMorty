@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import {
   Box,
   Button,
@@ -14,6 +13,7 @@ import { Link } from "react-router-dom";
 import { Loader } from "../utils/Loader";
 import { apiCharacter } from "../services/api";
 import Header from "../layout/Header";
+import toast, { Toaster } from "react-hot-toast";
 
 export interface ICharacters {
   id: number;
@@ -33,7 +33,6 @@ export function ListCharacters() {
   const [text, setText] = useState("");
 
   async function getCharacters() {
-    setCurrentPage(1);
     setIsLoading(true);
     const response = await apiCharacter.get(`?page=${currentPage}`);
     if (response) {
@@ -57,21 +56,28 @@ export function ListCharacters() {
   };
 
   async function getCharactersByName() {
-    setCurrentPage(1);
-    setIsLoading(true);
-    const response = await apiCharacter.get(
-      `/?page=${currentPage}&name=${text}`
-    );
-    if (response) {
-      setCharacters(response.data.results);
-      setQtdPage(response.data.info.pages);
+    try {
+      setIsLoading(true);
+      const response = await apiCharacter.get(
+        `/?page=${currentPage}&name=${text}`
+      );
+      if (response.status === 200) {
+        setCharacters(response.data.results);
+        setQtdPage(response.data.info.pages);
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+        toast.error("Ops, não encontrei esse personagem");
+      }
+    } catch (error) {
       setIsLoading(false);
+      toast.error("Ops, não encontrei esse personagem");
     }
-    setIsLoading(false);
   }
 
   return (
     <>
+      <Toaster position="bottom-left" reverseOrder={false} />
       {isLoading ? (
         <Loader Circular={isLoading} />
       ) : (
@@ -85,6 +91,7 @@ export function ListCharacters() {
             }}
           >
             <TextField
+              inputProps={{ style: { color: "#fff" } }}
               sx={{ color: "white" }}
               size="small"
               label="Digite um nome"
@@ -147,12 +154,12 @@ export function ListCharacters() {
               </motion.div>
             ))}
           </Box>
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Box sx={{ display: "flex", justifyContent: "center", backgroundcolor: '#fff' }}>
             <Pagination
               defaultPage={1}
               variant="outlined"
               color="primary"
-              sx={{ marginTop: "25px", marginBottom: "25px" }}
+              sx={{ marginTop: "25px", marginBottom: "25px", backgroundcolor: '#fff' }}
               size={matches ? "large" : "medium"}
               count={qtdPage}
               page={currentPage}

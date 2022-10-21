@@ -46,9 +46,9 @@ export const Character = () => {
           <Header />
           {characters.map((character) => (
             <Box
-            display={matches ? "flex" : ''}
+              display={matches ? "flex" : ""}
               sx={{
-                textAlign: 'center',
+                textAlign: "center",
                 justifyContent: "space-around",
                 alignItems: "center",
               }}
@@ -89,7 +89,10 @@ export const Character = () => {
           ))}
           <Box sx={{ textAlign: "center", marginTop: "50px" }}>
             <Link style={{ textDecoration: "none" }} to={`/`}>
-              <Button sx={{ backgroundColor: "#6E22B5", marginBottom: '20px' }} variant="contained">
+              <Button
+                sx={{ backgroundColor: "#6E22B5", marginBottom: "20px" }}
+                variant="contained"
+              >
                 Voltar
               </Button>
             </Link>

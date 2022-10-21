@@ -1,6 +1,5 @@
 import Box from "@mui/material/Box";
-import logo from "../assets/logo2.png";
-import { Button } from "@mui/material";
+import logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
 
 function Header() {
@@ -16,10 +15,7 @@ function Header() {
           a: { textDecoration: "none" },
         }}
       >
-        <Link
-          style={{ textDecoration: "none" }}
-          to={`/`}
-        >
+        <Link style={{ textDecoration: "none" }} to={`/`}>
           <Box
             component="img"
             sx={{
