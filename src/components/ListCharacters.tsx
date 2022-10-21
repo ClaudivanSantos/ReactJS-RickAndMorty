@@ -14,6 +14,7 @@ import { Loader } from "../utils/Loader";
 import { apiCharacter } from "../services/api";
 import Header from "../layout/Header";
 import toast, { Toaster } from "react-hot-toast";
+import { PaginationListCharacters } from "./PaginationListCharacters";
 
 export interface ICharacters {
   id: number;
@@ -29,23 +30,27 @@ export function ListCharacters() {
   const [characters, setCharacters] = useState<ICharacters[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [qtdPage, setQtdPage] = useState();
+  const [qtdPage, setQtdPage] = useState(1);
   const [text, setText] = useState("");
-  console.log(text);
 
   async function getCharacters() {
-    const response = await apiCharacter.get(`?page=${currentPage}`);
-    if (response) {
-      setCharacters(response.data.results);
-      setQtdPage(response.data.info.pages);
+    try {
+      setIsLoading(true);
+      const response = await apiCharacter.get(`?page=${currentPage}`);
+      if (response) {
+        setCharacters(response.data.results);
+        setQtdPage(response.data.info.pages);
+        setIsLoading(false);
+      }
+    } catch (error) {
       setIsLoading(false);
+      toast.error('Ocorreu um erro na busca')
     }
   }
   useEffect(() => {
     if (text) {
       getCharactersByName();
-    }
-    else if(!text){
+    } else if (!text) {
       getCharacters();
     }
   }, [currentPage]);
@@ -169,19 +174,12 @@ export function ListCharacters() {
               backgroundcolor: "#fff",
             }}
           >
-            <Pagination
-              defaultPage={1}
-              variant="outlined"
-              color="primary"
-              sx={{
-                marginTop: "25px",
-                marginBottom: "25px",
-                backgroundcolor: "#fff",
-              }}
-              size={matches ? "large" : "medium"}
-              count={qtdPage}
+            <PaginationListCharacters
+              currentPage={currentPage}
+              matches={matches}
+              handleChange={handleChange}
               page={currentPage}
-              onChange={handleChange}
+              count={qtdPage}
             />
           </Box>
         </>
