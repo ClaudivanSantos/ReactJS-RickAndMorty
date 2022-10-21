@@ -31,9 +31,9 @@ export function ListCharacters() {
   const [currentPage, setCurrentPage] = useState(1);
   const [qtdPage, setQtdPage] = useState();
   const [text, setText] = useState("");
+  console.log(text);
 
   async function getCharacters() {
-    setIsLoading(true);
     const response = await apiCharacter.get(`?page=${currentPage}`);
     if (response) {
       setCharacters(response.data.results);
@@ -45,7 +45,9 @@ export function ListCharacters() {
     if (text) {
       getCharactersByName();
     }
-    getCharacters();
+    else if(!text){
+      getCharacters();
+    }
   }, [currentPage]);
 
   const handleChange = async (
@@ -97,11 +99,17 @@ export function ListCharacters() {
               label="Digite um nome"
               value={text}
               onChange={(e) => setText(e.target.value)}
+              onKeyPress={(e) => {
+                let key = e.key;
+                if (key == "Enter") {
+                  getCharactersByName();
+                }
+              }}
             />
             <Button
               sx={{ backgroundColor: "#6E22B5", marginBottom: "20px" }}
               variant="contained"
-              onClick={getCharactersByName}
+              onClick={() => getCharactersByName()}
             >
               Buscar
             </Button>
@@ -154,12 +162,22 @@ export function ListCharacters() {
               </motion.div>
             ))}
           </Box>
-          <Box sx={{ display: "flex", justifyContent: "center", backgroundcolor: '#fff' }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              backgroundcolor: "#fff",
+            }}
+          >
             <Pagination
               defaultPage={1}
               variant="outlined"
               color="primary"
-              sx={{ marginTop: "25px", marginBottom: "25px", backgroundcolor: '#fff' }}
+              sx={{
+                marginTop: "25px",
+                marginBottom: "25px",
+                backgroundcolor: "#fff",
+              }}
               size={matches ? "large" : "medium"}
               count={qtdPage}
               page={currentPage}

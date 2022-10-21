@@ -64,7 +64,6 @@ export const Character = () => {
                 }}
                 src={character.image}
               />
-
               <Box
                 sx={{
                   background: "#6E22B5",
